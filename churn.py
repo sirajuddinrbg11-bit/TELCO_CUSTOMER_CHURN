@@ -70,7 +70,8 @@ total_charges = st.number_input('Total Charges', min_value=0.0, value=100.0, ste
 
 submitted = st.form_submit_button("Predict Churn")
 
-    if submitted:
+if submitted:
+        
         # Create a DataFrame from inputs
         input_data = pd.DataFrame({
             'gender': [gender],
