@@ -6,7 +6,7 @@ import pickle
 # --- 1. Load Model, Scaler, and Label Encoder Mappings ---
 try:
     # Load the best overall model (AdaBoost, as identified previously)
-    with open('adaboost_model.pkl', 'rb') as f:
+    with open('best_overall_model.pkl', 'rb') as f:
         model = pickle.load(f)
     # Load the StandardScaler
     with open('scaler.pkl', 'rb') as f:
