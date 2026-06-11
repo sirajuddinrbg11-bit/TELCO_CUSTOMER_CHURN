@@ -16,57 +16,57 @@ def telco_customer_churn(features):
 st.title("Customer Churn Prediction")
 
 # get user Input
-        gender_options = list(label_encoders_maps['gender'].keys())
-        gender = st.selectbox('Gender', gender_options, key='gender_input')
+gender_options = list(label_encoders_maps['gender'].keys())
+gender = st.selectbox('Gender', gender_options, key='gender_input')
 
-        senior_citizen = st.selectbox('Senior Citizen', ['No', 'Yes'], key='senior_citizen_input')
+senior_citizen = st.selectbox('Senior Citizen', ['No', 'Yes'], key='senior_citizen_input')
 
-        partner_options = list(label_encoders_maps['Partner'].keys())
-        partner = st.selectbox('Partner', partner_options, key='partner_input')
+partner_options = list(label_encoders_maps['Partner'].keys())
+partner = st.selectbox('Partner', partner_options, key='partner_input')
 
-        dependents_options = list(label_encoders_maps['Dependents'].keys())
-        dependents = st.selectbox('Dependents', dependents_options, key='dependents_input')
+dependents_options = list(label_encoders_maps['Dependents'].keys())
+dependents = st.selectbox('Dependents', dependents_options, key='dependents_input')
 
-        tenure = st.slider('Tenure (months)', 0, 72, 12, key='tenure_input')
+tenure = st.slider('Tenure (months)', 0, 72, 12, key='tenure_input')
 
-        phone_service_options = list(label_encoders_maps['PhoneService'].keys())
-        phone_service = st.selectbox('Phone Service', phone_service_options, key='phone_service_input')
+phone_service_options = list(label_encoders_maps['PhoneService'].keys())
+phone_service = st.selectbox('Phone Service', phone_service_options, key='phone_service_input')
 
-        multiple_lines_options = list(label_encoders_maps['MultipleLines'].keys())
-        multiple_lines = st.selectbox('Multiple Lines', multiple_lines_options, key='multiple_lines_input')
+multiple_lines_options = list(label_encoders_maps['MultipleLines'].keys())
+multiple_lines = st.selectbox('Multiple Lines', multiple_lines_options, key='multiple_lines_input')
 
-        internet_service_options = list(label_encoders_maps['InternetService'].keys())
-        internet_service = st.selectbox('Internet Service', internet_service_options, key='internet_service_input')
+internet_service_options = list(label_encoders_maps['InternetService'].keys())
+internet_service = st.selectbox('Internet Service', internet_service_options, key='internet_service_input')
 
-        online_security_options = list(label_encoders_maps['OnlineSecurity'].keys())
-        online_security = st.selectbox('Online Security', online_security_options, key='online_security_input')
+online_security_options = list(label_encoders_maps['OnlineSecurity'].keys())
+online_security = st.selectbox('Online Security', online_security_options, key='online_security_input')
 
-        online_backup_options = list(label_encoders_maps['OnlineBackup'].keys())
-        online_backup = st.selectbox('Online Backup', online_backup_options, key='online_backup_input')
+online_backup_options = list(label_encoders_maps['OnlineBackup'].keys())
+online_backup = st.selectbox('Online Backup', online_backup_options, key='online_backup_input')
 
-        device_protection_options = list(label_encoders_maps['DeviceProtection'].keys())
-        device_protection = st.selectbox('Device Protection', device_protection_options, key='device_protection_input')
+device_protection_options = list(label_encoders_maps['DeviceProtection'].keys())
+device_protection = st.selectbox('Device Protection', device_protection_options, key='device_protection_input')
 
-        tech_support_options = list(label_encoders_maps['TechSupport'].keys())
-        tech_support = st.selectbox('Tech Support', tech_support_options, key='tech_support_input')
+tech_support_options = list(label_encoders_maps['TechSupport'].keys())
+tech_support = st.selectbox('Tech Support', tech_support_options, key='tech_support_input')
 
-        streaming_tv_options = list(label_encoders_maps['StreamingTV'].keys())
-        streaming_tv = st.selectbox('Streaming TV', streaming_tv_options, key='streaming_tv_input')
+streaming_tv_options = list(label_encoders_maps['StreamingTV'].keys())
+streaming_tv = st.selectbox('Streaming TV', streaming_tv_options, key='streaming_tv_input')
 
-        streaming_movies_options = list(label_encoders_maps['StreamingMovies'].keys())
-        streaming_movies = st.selectbox('Streaming Movies', streaming_movies_options, key='streaming_movies_input')
+streaming_movies_options = list(label_encoders_maps['StreamingMovies'].keys())
+streaming_movies = st.selectbox('Streaming Movies', streaming_movies_options, key='streaming_movies_input')
 
-        contract_options = list(label_encoders_maps['Contract'].keys())
-        contract = st.selectbox('Contract', contract_options, key='contract_input')
+contract_options = list(label_encoders_maps['Contract'].keys())
+contract = st.selectbox('Contract', contract_options, key='contract_input')
 
-        paperless_billing_options = list(label_encoders_maps['PaperlessBilling'].keys())
-        paperless_billing = st.selectbox('Paperless Billing', paperless_billing_options, key='paperless_billing_input')
+paperless_billing_options = list(label_encoders_maps['PaperlessBilling'].keys())
+paperless_billing = st.selectbox('Paperless Billing', paperless_billing_options, key='paperless_billing_input')
 
-        payment_method_options = list(label_encoders_maps['PaymentMethod'].keys())
-        payment_method = st.selectbox('Payment Method', payment_method_options, key='payment_method_input')
+payment_method_options = list(label_encoders_maps['PaymentMethod'].keys())
+payment_method = st.selectbox('Payment Method', payment_method_options, key='payment_method_input')
 
-        monthly_charges = st.number_input('Monthly Charges', min_value=0.0, value=50.0, step=0.1, key='monthly_charges_input')
-        total_charges = st.number_input('Total Charges', min_value=0.0, value=100.0, step=0.1, key='total_charges_input')
+monthly_charges = st.number_input('Monthly Charges', min_value=0.0, value=50.0, step=0.1, key='monthly_charges_input')
+total_charges = st.number_input('Total Charges', min_value=0.0, value=100.0, step=0.1, key='total_charges_input')
 
 submitted = st.form_submit_button("Predict Churn")
 
