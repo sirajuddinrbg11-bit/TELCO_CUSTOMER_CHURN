@@ -15,7 +15,7 @@ try:
     with open('label_encoders_maps.pkl', 'rb') as f:
         label_encoders_maps = pickle.load(f)
 except FileNotFoundError:
-    st.error("Model, scaler, or label encoder mappings not found. Please ensure 'adaboost_model.pkl', 'scaler.pkl', and 'label_encoders_maps.pkl' are in the same directory.")
+    st.error("Model, scaler, or label encoder mappings not found. Please ensure 'best_overall_model.pkl', 'scaler.pkl', and 'label_encoders_maps.pkl' are in the same directory.")
     st.stop()
 
 # --- 2. Preprocessing Function ---
@@ -30,6 +30,9 @@ def preprocess_input(input_df):
     # Apply label encoding using the loaded mappings
     for col, mapping in label_encoders_maps.items():
         if col in processed_df.columns and col != 'Churn': # 'Churn' is the target, not an input feature here
+            # Skip SeniorCitizen as it's already numeric (0/1)
+            if col == 'SeniorCitizen':
+                continue
             # Map input values to their encoded integers. If an unseen value appears, map to -1.
             processed_df[col] = processed_df[col].apply(lambda x: mapping.get(x, -1))
 
@@ -52,6 +55,7 @@ def preprocess_input(input_df):
     processed_df = processed_df[feature_order]
 
     # Scale numerical features using the pre-fitted scaler
+    # Ensure we're passing a 2D array
     scaled_data = scaler.transform(processed_df)
     
     return scaled_data
@@ -124,41 +128,45 @@ with st.form("churn_prediction_form"):
     submitted = st.form_submit_button("Predict Churn")
 
     if submitted:
-        # Create a DataFrame from inputs
-        input_data = pd.DataFrame({
-            'gender': [gender],
-            'SeniorCitizen': [1 if senior_citizen == 'Yes' else 0], # Convert 'Yes'/'No' to 1/0
-            'Partner': [partner],
-            'Dependents': [dependents],
-            'tenure': [tenure],
-            'PhoneService': [phone_service],
-            'MultipleLines': [multiple_lines],
-            'InternetService': [internet_service],
-            'OnlineSecurity': [online_security],
-            'OnlineBackup': [online_backup],
-            'DeviceProtection': [device_protection],
-            'TechSupport': [tech_support],
-            'StreamingTV': [streaming_tv],
-            'StreamingMovies': [streaming_movies],
-            'Contract': [contract],
-            'PaperlessBilling': [paperless_billing],
-            'PaymentMethod': [payment_method],
-            'MonthlyCharges': [monthly_charges],
-            'TotalCharges': [total_charges]
-        })
+        try:
+            # Create a DataFrame from inputs
+            input_data = pd.DataFrame({
+                'gender': [gender],
+                'SeniorCitizen': [1 if senior_citizen == 'Yes' else 0], # Convert 'Yes'/'No' to 1/0
+                'Partner': [partner],
+                'Dependents': [dependents],
+                'tenure': [tenure],
+                'PhoneService': [phone_service],
+                'MultipleLines': [multiple_lines],
+                'InternetService': [internet_service],
+                'OnlineSecurity': [online_security],
+                'OnlineBackup': [online_backup],
+                'DeviceProtection': [device_protection],
+                'TechSupport': [tech_support],
+                'StreamingTV': [streaming_tv],
+                'StreamingMovies': [streaming_movies],
+                'Contract': [contract],
+                'PaperlessBilling': [paperless_billing],
+                'PaymentMethod': [payment_method],
+                'MonthlyCharges': [monthly_charges],
+                'TotalCharges': [total_charges]
+            })
 
-        # Preprocess input data
-        processed_input = preprocess_input(input_data)
+            # Preprocess input data
+            processed_input = preprocess_input(input_data)
 
-        # Make prediction
-        prediction_encoded = model.predict(processed_input)
-        prediction_proba = model.predict_proba(processed_input)
+            # Make prediction
+            prediction_encoded = model.predict(processed_input)
+            prediction_proba = model.predict_proba(processed_input)
 
-        # Decode the prediction back to 'Yes' or 'No'
-        # Find the original labels for 'Churn' based on the stored mapping
-        churn_mapping = {v: k for k, v in label_encoders_maps['Churn'].items()}
-        churn_result = churn_mapping.get(prediction_encoded[0], 'Unknown')
+            # Decode the prediction back to 'Yes' or 'No'
+            # Find the original labels for 'Churn' based on the stored mapping
+            churn_mapping = {v: k for k, v in label_encoders_maps['Churn'].items()}
+            churn_result = churn_mapping.get(prediction_encoded[0], 'Unknown')
 
-        st.subheader(f"Prediction: Customer will **{'churn' if churn_result == 'Yes' else 'not churn'}**.")
-        st.write(f"Probability of Not Churning: {prediction_proba[0][label_encoders_maps['Churn']['No']]:.2f}")
-        st.write(f"Probability of Churning: {prediction_proba[0][label_encoders_maps['Churn']['Yes']]:.2f}")
+            st.subheader(f"Prediction: Customer will **{'churn' if churn_result == 'Yes' else 'not churn'}**.")
+            st.write(f"Probability of Not Churning: {prediction_proba[0][label_encoders_maps['Churn']['No']]:.2f}")
+            st.write(f"Probability of Churning: {prediction_proba[0][label_encoders_maps['Churn']['Yes']]:.2f}")
+        
+        except Exception as e:
+            st.error(f"An error occurred during prediction: {str(e)}")
