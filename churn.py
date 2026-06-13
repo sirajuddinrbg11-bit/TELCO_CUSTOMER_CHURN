@@ -8,6 +8,14 @@ try:
     # Load the best overall model (AdaBoost, as identified previously)
     with open('best_overall_model.pkl', 'rb') as f:
         model = pickle.load(f)
+    
+    # Handle case where model might be saved as a dictionary
+    if isinstance(model, dict):
+        model = model.get('model', model)
+        if isinstance(model, dict):
+            st.error("Model file contains a dictionary but no 'model' key found. Please re-save the model correctly.")
+            st.stop()
+    
     # Load the StandardScaler
     with open('scaler.pkl', 'rb') as f:
         scaler = pickle.load(f)
